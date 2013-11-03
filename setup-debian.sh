@@ -460,8 +460,8 @@ END
 			/etc/nginx/nginx.conf
  fi
 
-	# restart nginx
-	invoke-rc.d nginx restart
+	# reload nginx configuration files
+	invoke-rc.d nginx reload
 }
 
 function install_site {
@@ -528,7 +528,8 @@ END
 	# PHP/Nginx needs permission to access this
 	chown www-data:www-data -R "/var/www/$1"
 
-	invoke-rc.d nginx restart
+	# reload nginx configuration files
+	invoke-rc.d nginx reload
 
 	print_warn "New site successfully installed."
 	print_warn "You may can test PHP functionality by accessing $1/phpinfo.php"
@@ -661,7 +662,8 @@ END
 	# PHP/Nginx needs permission to access this
 	chown www-data:www-data -R "/var/www/$1"
 
-	invoke-rc.d nginx restart
+	# reload nginx configuration files
+	invoke-rc.d nginx reload
 
 	print_warn "New wordpress site successfully installed."
 }
