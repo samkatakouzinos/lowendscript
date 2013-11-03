@@ -92,10 +92,18 @@ function print_warn {
 # applications
 ############################################################
 
+function install_curl {
+        check_install curl curl
+}
+
 function install_dash {
 	check_install dash dash
 	rm -f /bin/sh
 	ln -s dash /bin/sh
+}
+
+function install_ed {
+        check_install ed ed
 }
 
 function install_nano {
@@ -1265,7 +1273,9 @@ system)
 	update_timezone
 	remove_unneeded
 	update_upgrade
+	install_curl
 	install_dash
+	install_ed
 	install_vim
 	install_nano
 	install_htop
