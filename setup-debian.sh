@@ -263,7 +263,7 @@ skip-character-set-client-handshake
 default_storage_engine=MyISAM
 skip-innodb
 
-log-slow-queries=/var/log/mysql/slow-queries.log
+slow_query_log_file=/var/log/mysql/slow-queries.log
 
 [client]
 default-character-set = utf8
