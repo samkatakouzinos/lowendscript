@@ -244,7 +244,7 @@ function install_mysql {
 [mysqld]
 key_buffer = 12M
 query_cache_size = 0
-table_cache = 32
+table_open_cache = 32   #  ----- edited for newer versions of mysql
 
 init_connect='SET collation_connection = utf8_unicode_ci'
 init_connect='SET NAMES utf8' 
@@ -252,10 +252,11 @@ character-set-server = utf8
 collation-server = utf8_unicode_ci 
 skip-character-set-client-handshake
 
+default-tmp-storage-engine=myisam  #  -----  added for newer versions of mysql
 default_storage_engine=MyISAM
 skip-innodb
 
-log-slow-queries=/var/log/mysql/slow-queries.log
+#log-slow-queries=/var/log/mysql/slow-queries.log  --- error in newer versions of mysql
 
 [client]
 default-character-set = utf8
