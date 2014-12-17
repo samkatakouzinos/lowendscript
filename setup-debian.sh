@@ -252,8 +252,8 @@ character-set-server = utf8
 collation-server = utf8_unicode_ci 
 skip-character-set-client-handshake
 
-default-tmp-storage-engine=myisam  #  -----  added for newer versions of mysql
-default_storage_engine=MyISAM
+default_tmp_storage_engine = MyISAM  #  -----  added for newer versions of mysql
+default_storage_engine = MyISAM
 skip-innodb
 
 #log-slow-queries=/var/log/mysql/slow-queries.log  --- error in newer versions of mysql
