@@ -243,8 +243,8 @@ function install_mysql {
 
 [mysqld]
 key_buffer = 12M
-query_cache_size = 0
-table_open_cache = 32   #  ----- edited for newer versions of mysql
+query_cache_limit = 256K
+query_cache_size = 4M
 
 init_connect='SET collation_connection = utf8_unicode_ci'
 init_connect='SET NAMES utf8' 
