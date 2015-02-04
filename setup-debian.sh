@@ -868,12 +868,12 @@ function install_vzfree {
 	cd ~
 	wget https://github.com/lowendbox/vzfree/archive/master.zip -O vzfree.zip
 	unzip vzfree.zip
-	cd vzfree
+	cd vzfree-master
 	make && make install
 	cd ..
 	vzfree
 	print_info "vzfree has been installed"
-	rm -fr vzfree vzfree.zip
+	rm -fr vzfree-master vzfree.zip
 }
 
 ############################################################
