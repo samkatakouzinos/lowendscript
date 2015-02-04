@@ -829,7 +829,7 @@ function install_ps_mem {
 function update_apt_sources {
 	grep '^DISTRIB_CODENAME=' /etc/*-release 2>/dev/null
 
-	if [ "$DISTRIB_CODENAME" == "" ]
+	if [ "DISTRIB_CODENAME" == "" ]
 	then
 		die "Unknown Ubuntu flavor $DISTRIB_CODENAME"
 	fi
