@@ -827,9 +827,9 @@ function install_ps_mem {
 # Update apt sources (Ubuntu only; not yet supported for debian)
 ############################################################
 function update_apt_sources {
-	grep '^DISTRIB_CODENAME=' /etc/*-release 2>/dev/null
+	grep '^DISTRIB_CODENAME=' /etc/lsb-release
 
-	if [ "DISTRIB_CODENAME" == "" ]
+	if [ "$DISTRIB_CODENAME" == "" ]
 	then
 		die "Unknown Ubuntu flavor $DISTRIB_CODENAME"
 	fi
