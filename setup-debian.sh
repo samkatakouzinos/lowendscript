@@ -827,7 +827,7 @@ function install_ps_mem {
 # Update apt sources (Ubuntu only; not yet supported for debian)
 ############################################################
 function update_apt_sources {
-	eval `grep '^DISTRIB_CODENAME=' /etc/*-release 2>/dev/null`
+	grep '^DISTRIB_CODENAME=' /etc/*-release 2>/dev/null
 
 	if [ "$DISTRIB_CODENAME" == "" ]
 	then
@@ -866,14 +866,14 @@ function install_vzfree {
 	print_warn "build-essential package is now being installed which will take additional diskspace"
 	check_install build-essential build-essential
 	cd ~
-	wget http://hostingfu.com/files/vzfree/vzfree-0.1.tgz -O vzfree-0.1.tgz
-	tar -vxf vzfree-0.1.tgz
-	cd vzfree-0.1
+	wget https://github.com/lowendbox/vzfree/archive/master.zip -O vzfree.zip
+	unzip vzfree.zip
+	cd vzfree
 	make && make install
 	cd ..
 	vzfree
 	print_info "vzfree has been installed"
-	rm -fr vzfree-0.1 vzfree-0.1.tgz
+	rm -fr vzfree vzfree.zip
 }
 
 ############################################################
