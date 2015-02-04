@@ -827,7 +827,7 @@ function install_ps_mem {
 # Update apt sources (Ubuntu only; not yet supported for debian)
 ############################################################
 function update_apt_sources {
-	. /etc/lsb-release
+	DISTRIB_CODENAME =`lsb_release --codename | cut -f2`
 
 	if [ "$DISTRIB_CODENAME" == "" ]
 	then
