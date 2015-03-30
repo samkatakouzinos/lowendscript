@@ -243,8 +243,8 @@ function install_mysql {
 
 [mysqld]
 key_buffer = 12M
-query_cache_size = 0
-table_cache = 32
+query_cache_limit = 256K
+query_cache_size = 4M
 
 init_connect='SET collation_connection = utf8_unicode_ci'
 init_connect='SET NAMES utf8' 
@@ -252,10 +252,11 @@ character-set-server = utf8
 collation-server = utf8_unicode_ci 
 skip-character-set-client-handshake
 
-default_storage_engine=MyISAM
+default_tmp_storage_engine = MyISAM  #  -----  added for newer versions of mysql
+default_storage_engine = MyISAM
 skip-innodb
 
-log-slow-queries=/var/log/mysql/slow-queries.log
+#log-slow-queries=/var/log/mysql/slow-queries.log  --- error in newer versions of mysql
 
 [client]
 default-character-set = utf8
@@ -323,13 +324,10 @@ END
 	if [ -f /etc/php5/fpm/php.ini ]
 		then
 			sed -i \
-				"s/upload_max_filesize = 2M/upload_max_filesize = 200M/" \
+				"s/upload_max_filesize = 2M/upload_max_filesize = 256M/" \
 				/etc/php5/fpm/php.ini
 			sed -i \
-				"s/post_max_size = 8M/post_max_size = 200M/" \
-				/etc/php5/fpm/php.ini
-			sed -i \
-				"s/memory_limit = 128M/memory_limit = 36M/" \
+				"s/post_max_size = 8M/post_max_size = 256M/" \
 				/etc/php5/fpm/php.ini
 	fi
 
@@ -829,36 +827,36 @@ function install_ps_mem {
 # Update apt sources (Ubuntu only; not yet supported for debian)
 ############################################################
 function update_apt_sources {
-	eval `grep '^DISTRIB_CODENAME=' /etc/*-release 2>/dev/null`
+	codename=`lsb_release --codename | cut -f2`
 
-	if [ "$DISTRIB_CODENAME" == "" ]
+	if [ "$codename" == "" ]
 	then
-		die "Unknown Ubuntu flavor $DISTRIB_CODENAME"
+		die "Unknown Ubuntu flavor $codename"
 	fi
 
 	cat > /etc/apt/sources.list <<END
 ## main & restricted repositories
-deb http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME main restricted
-deb-src http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME main restricted
+deb http://us.archive.ubuntu.com/ubuntu/ $codename main restricted
+deb-src http://us.archive.ubuntu.com/ubuntu/ $codename main restricted
 
-deb http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-updates main restricted
-deb-src http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-updates main restricted
+deb http://security.ubuntu.com/ubuntu $codename-updates main restricted
+deb-src http://security.ubuntu.com/ubuntu $codename-updates main restricted
 
-deb http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-security main restricted
-deb-src http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-security main restricted
+deb http://security.ubuntu.com/ubuntu $codename-security main restricted
+deb-src http://security.ubuntu.com/ubuntu $codename-security main restricted
 
 ## universe repositories - uncomment to enable
-deb http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME universe
-deb-src http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME universe
+deb http://us.archive.ubuntu.com/ubuntu/ $codename universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ $codename universe
 
-deb http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME-updates universe
-deb-src http://us.archive.ubuntu.com/ubuntu/ $DISTRIB_CODENAME-updates universe
+deb http://us.archive.ubuntu.com/ubuntu/ $codename-updates universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ $codename-updates universe
 
-deb http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-security universe
-deb-src http://security.ubuntu.com/ubuntu $DISTRIB_CODENAME-security universe
+deb http://security.ubuntu.com/ubuntu $codename-security universe
+deb-src http://security.ubuntu.com/ubuntu $codename-security universe
 END
 
-	print_info "/etc/apt/sources.list updated for "$DISTRIB_CODENAME
+	print_info "/etc/apt/sources.list updated for "$codename
 }
 
 ############################################################
@@ -868,14 +866,14 @@ function install_vzfree {
 	print_warn "build-essential package is now being installed which will take additional diskspace"
 	check_install build-essential build-essential
 	cd ~
-	wget http://hostingfu.com/files/vzfree/vzfree-0.1.tgz -O vzfree-0.1.tgz
-	tar -vxf vzfree-0.1.tgz
-	cd vzfree-0.1
+	wget https://github.com/lowendbox/vzfree/archive/master.zip -O vzfree.zip
+	unzip vzfree.zip
+	cd vzfree-master
 	make && make install
 	cd ..
 	vzfree
 	print_info "vzfree has been installed"
-	rm -fr vzfree-0.1 vzfree-0.1.tgz
+	rm -fr vzfree-master vzfree.zip
 }
 
 ############################################################
